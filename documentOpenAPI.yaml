@@ -1,0 +1,163 @@
+openapi: 3.0.1
+info:
+  title: Swagger Mutante
+  description: >-
+    Este es un ejemplo de la API Rest para la verificación de secuencias del adn
+    que permite determinar si un ser humano es o no mutante.
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: lauravanessap@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+servers:
+  - url: 'http://mutantapp-env.eba-32pxjiwp.us-east-1.elasticbeanstalk.com/'
+tags:
+  - name: mutante
+    description: >-
+      Identifica si un humano es mutante a partir de la secuencia de su adn,
+      además de cifras estadísticas que te permitirán conocer las proporciones
+      en que esta API ha detectado mutantes de no mutantes.
+paths:
+  /mutant:
+    post:
+      tags:
+        - mutante
+      summary: Verifica si la secuencia del adn corresponde a un mutante o no.
+      requestBody:
+        description: Secuencia de adn a ser verificada por la API
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mutante'
+            example:
+              dna:
+                - ATGCGA
+                - CAGTGC
+                - TTATGT
+                - AGAAGG
+                - CCCCTA
+                - TCACTG
+        required: true
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          description: Invalid sequence
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+      security: []
+  /stats:
+    get:
+      tags:
+        - mutante
+      summary: Muestra las estadísticas de adn's verificados.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stats'
+              example:
+                count_mutant_dna: 40
+                count_human_dna: 100
+                ratio: 0.4
+  /list:
+    get:
+      tags:
+        - mutante
+      summary: Muestra los adn's que se encuentran almacenados en base de datos.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutantBD'
+              example:
+                - mutantId: 60ac81f83002b9709e84cc68
+                  dna:
+                    - ATGCGA
+                    - CAGTGC
+                    - TTATTT
+                    - AAAAGG
+                    - GCGTCA
+                    - TCACTG
+                  isMutant: true
+                - mutantId: 60ac821a3002b9709e84cc69
+                  dna:
+                    - ATGCGA
+                    - CAGTGC
+                    - TTATTT
+                    - ATAAGG
+                    - GCGTCA
+                    - TCACTG
+                  isMutant: false
+                - mutantId: 60ac82343002b9709e84cc6a
+                  dna:
+                    - ATGCGA
+                    - CATTGC
+                    - TTATTT
+                    - ATAAGG
+                    - GCGTCA
+                    - TCACTG
+                  isMutant: false
+                - mutantId: 60ac82463002b9709e84cc6b
+                  dna:
+                    - ATGCGA
+                    - CATTGC
+                    - TTATTT
+                    - ATAATG
+                    - GCGTCA
+                    - TCACTG
+                  isMutant: true
+                - mutantId: 60ac82503002b9709e84cc6c
+                  dna:
+                    - ATGCGA
+                    - CATTGC
+                    - TTATTT
+                    - ATACTG
+                    - GCGTCA
+                    - TCACTG
+                  isMutant: false
+      security: []
+components:
+  schemas:
+    Mutante:
+      type: object
+      properties:
+        dna:
+          type: array
+          items:
+            type: string
+      required:
+        - dna
+    Stats:
+      type: object
+      properties:
+        count_mutant_dna:
+          type: integer
+        count_human_dna:
+          type: integer
+        ratio:
+          type: number
+          format: float
+    MutantBD:
+      type: object
+      properties:
+        mutantId:
+          type: string
+        dna:
+          type: array
+          items:
+            type: string
+        isMutant:
+          type: boolean
