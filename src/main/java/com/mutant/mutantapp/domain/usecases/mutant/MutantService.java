@@ -15,8 +15,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Clase que orquesta la lógica de negocio necesaria para la gestión los humanos analizados
- * por esta aplicación.
+ * Clase que orquesta la lógica de negocio necesaria para suplir la funcionalidad brindada por esta
+ * aplicación
  * @author lauravanessap@gmail.com
  */
 @Log4j2
